@@ -1,0 +1,17 @@
+# build artifacts
+build/
+*.bin
+*.elf
+.DS_Store
+*.cache/
+
+# NOT PUBLISHED -- these live in the working tree, never in the repo.
+# photos/ is 449 MB of .MOV; IMG_1291.MOV alone is 202 MB, over GitHub's
+# 100 MB per-file hard limit. Video goes to YouTube and is linked from
+# the README, where it is also discoverable, which a .MOV in a repo is not.
+photos/
+# social/ is marketing working files and bundled fonts. Redistributing
+# licensed fonts in a public repo is a licence violation.
+social/
+# staging copy of the Instructable
+docs/_tmp_hold/

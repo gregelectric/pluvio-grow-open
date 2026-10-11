@@ -1,0 +1,34 @@
+Pluvio Grow — M5 Open Build
+NOTICE
+
+Firmware (firmware/pluvio_m5/):
+  Source is Pluvio "Drip" firmware at release tag v1.0.3 (pre-cloud), extracted
+  verbatim from the private development repository and renamed main.cpp ->
+  pluvio_m5.ino. Released here for PERSONAL and NON-COMMERCIAL use, with
+  attribution. No warranty of any kind.
+
+Patent:
+  The gravimetric, per-plant (weighed) dosing mechanism is the subject of a
+  PENDING patent, US application 64/071,683, held by Powell Electronic Inc.
+  This release grants permission to build units for personal, non-commercial
+  use only. It does NOT grant any license to make, use, sell, or offer for sale
+  the patented mechanism commercially. For commercial licensing, contact
+  Powell Electronic Inc. via https://pluviogrow.com.
+
+Trademarks:
+  "Pluvio", "Pluvio Grow", and "Rain, with a brain." are trademarks of
+  Powell Electronic Inc. You may build and modify your own device; you may not
+  market or sell a device under these marks, or imply endorsement, without
+  written permission.
+
+Safety / liability:
+  This device moves water near mains-adjacent electronics. It is provided for
+  hobbyist, at-your-own-risk use with NO WARRANTY and NO liability accepted by
+  Powell Electronic Inc. for any damage, loss, or injury arising from building
+  or operating it.
+
+Attribution line to reuse:
+  "Based on Pluvio Grow (https://pluviogrow.com), a product of
+   Powell Electronic Inc. — CC BY-NC-SA 4.0."
+
+© 2026 Powell Electronic Inc.

@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.ino   text eol=lf
+*.md    text eol=lf
+*.STL   binary
+*.STEP  binary
+*.pdf   binary
+*.png   binary
+*.jpg   binary
