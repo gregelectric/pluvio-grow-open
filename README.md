@@ -166,5 +166,10 @@ reservoir onto your floor.
 
 <p align="center"><img src="docs/img/mabel.png" width="150" alt="Mabel"><br><em>Mabel · Quality Control</em></p>
 
-*Made by one person who got tired of killing plants. If you build one, show us —
-tag [@pluviogrow](https://pluviogrow.com). Generation Green. 🌱*
+> **We're growing the team.** Like-minded makers welcome — full disclosure: no pay
+> (yet) and long hours, less a sweatshop than a greenhouse (everyone in it is
+> growing something). If that somehow appeals, come say hello at
+> [pluviogrow.com](https://pluviogrow.com).
+
+*Made by a team dedicated to sharing a passion for making and growing things. If
+you build one, show us — tag [@pluviogrow](https://pluviogrow.com). Generation Green. 🌱*
