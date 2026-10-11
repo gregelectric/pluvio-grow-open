@@ -1,33 +1,11 @@
 import markdown, re, pathlib
-
 SRC = pathlib.Path("/mnt/user-data/uploads/pluvio/products/pluvio-grow/open-build/docs/_INSTRUCTABLE_for_stage.md")
-raw = SRC.read_text()
-
-# ---- 1) produce a CLEANED markdown (repo-relative paths) to write back to the repo ----
-md = raw
-# drop the stale DRAFT blockquote
-md = re.sub(r"(?ms)^> \*\*DRAFT for Instructables.*?(?:\n\n|\Z)", "", md, count=1)
-# intro hero render -> real deployed prototype photo
-md = md.replace("![Pluvio Grow — the finished build](../hardware/hero.png)",
-                "![Pluvio Grow — 13-plant build, deployed](../photos/IMG_1336.jpg)")
-# drop the intro placeholder caption (the cover already shows the finished build)
-md = md.replace("\n*(Photo: the prototype on the shelf. Photo: quality-control cat inspecting it.)*\n", "\n")
-# drop the rejected cartoon wiring image; wiring is covered by the written steps
-md = md.replace("\n![Wiring diagram](../hardware/wiring/wiring_diagram.png)\n", "\n")
-# put a real assembled-unit photo where it helps: the assembly step
-md = md.replace(
-    "with the top-hat grommets. *(Photos per the exploded view.)*",
-    "with the top-hat grommets.\n\n![The assembled carousel — 13 weighed metering vessels](../photos/IMG_0996.jpg)")
-pathlib.Path("/home/claude/oss/INSTRUCTABLE_clean.md").write_text(md)
-
-# ---- 2) build the PDF HTML from that cleaned markdown, pointing images at local img/ ----
-body_md = md
-body_md = body_md.replace("../photos/IMG_1336.jpg", "img/cover.jpg")      # (not used in body; cover is separate)
-body_md = body_md.replace("![Pluvio Grow — 13-plant build, deployed](img/cover.jpg)", "")  # intro hero shown on cover
-body_md = body_md.replace("../photos/IMG_0996.jpg", "img/finished.jpg")
-body_md = body_md.replace("../hardware/parts_overview.png", "img/parts.png")
-body = markdown.markdown(body_md, extensions=["tables", "fenced_code", "sane_lists"])
-
+md = SRC.read_text()
+# intro hero (the cross-section) is shown on the cover — drop the inline copy
+md = re.sub(r"!\[Pluvio Grow — M5 build, sectioned\]\(img/hero_section\.png\)\n?", "", md)
+# map the doc's image path to the local build copy
+md = md.replace("img/parts_overview.png", "img/parts.png")
+body = markdown.markdown(md, extensions=["tables","fenced_code","sane_lists"])
 CSS = """
 @page { size: A4; margin: 16mm 15mm; }
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Fraunces:ital,wght@1,500;0,600&family=JetBrains+Mono:wght@500;700&display=swap');
@@ -50,19 +28,19 @@ tr:nth-child(even) td{background:rgba(255,255,255,.4);}
 blockquote{background:rgba(196,111,2,.07);border-left:3px solid var(--orange);margin:10pt 0;padding:8pt 12pt;border-radius:0 8px 8px 0;font-size:9.5pt;color:#4a3f30;}
 blockquote strong{color:var(--orange);}
 hr{border:none;border-top:2px solid var(--rule);margin:16pt 0;}
-ul,ol{padding-left:18px;}
-li{margin:3pt 0;}
-.cover{page-break-after:always;text-align:center;padding-top:6mm;}
-.cover img{width:86%;margin:6mm auto;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.18);}
+ul,ol{padding-left:18px;} li{margin:3pt 0;}
+.cover{page-break-after:always;text-align:center;padding-top:10mm;}
+.cover img{width:82%;margin:8mm auto;}
 .cover .tag{font-family:'JetBrains Mono',monospace;color:var(--orange);letter-spacing:.14em;text-transform:uppercase;font-size:10pt;}
 .cover .eyebrow{font-family:'JetBrains Mono',monospace;color:var(--soft);letter-spacing:.2em;text-transform:uppercase;font-size:9pt;margin-top:2mm;}
 .cover h1{font-size:30pt;margin-top:3mm;}
 """
 cover = """<div class="cover">
+<img src="img/pluvio_mark.png" style="width:66px;height:auto;margin:0 auto 5mm;display:block;border-radius:0;">
 <div class="eyebrow">Open Source · Build it yourself</div>
 <h1>Pluvio Grow — M5 Build</h1>
 <div class="tag">Rain, with a brain.</div>
-<img src="img/cover.jpg">
+<img src="img/cover.png">
 <div style="font-family:'JetBrains Mono',monospace;color:#6b6864;font-size:9pt;">A 13-plant, weighed-dose plant waterer from M5Stack parts<br>pluviogrow.com · a product of Powell Electronic Inc.</div>
 </div>"""
 html = f"<!doctype html><html><head><meta charset='utf-8'><style>{CSS}</style></head><body>{cover}{body}</body></html>"

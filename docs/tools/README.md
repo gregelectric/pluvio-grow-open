@@ -10,5 +10,4 @@ marketing video pipeline convention.
 - `render.cjs` — Chromium prints the HTML to A4 PDF:
   `node render.cjs <input.html> <output.pdf>`
 
-Cover photo: `photos/IMG_1336.jpg` · assembly photo: `photos/IMG_0996.jpg` ·
-parts render: `hardware/parts_overview.png`.
+Cover: `docs/img/hero_section.png` (the brand cross-section) · parts render: `docs/img/parts_overview.png`.

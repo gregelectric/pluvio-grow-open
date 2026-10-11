@@ -1,8 +1,10 @@
+<p align="center"><img src="docs/img/pluvio_mark.png" width="90" alt="Pluvio"></p>
+
 # Pluvio Grow — M5 Open Build
 
 **Rain, with a brain.** 🌧️🧠
 
-![Pluvio Grow](hardware/hero.png)
+![Pluvio Grow — M5 build, sectioned](docs/img/hero_section.png)
 
 An open, 3D-printable, **13-plant gravimetric** plant waterer you can build from
 off-the-shelf **M5Stack** parts. One rotary arm visits each plant in turn and
@@ -65,19 +67,22 @@ load cell weighs the water actually delivered** — closed-loop, per plant.
 | Small-bore **tubing** (~6 ft × 13 ≈ 78 ft) | — | one line per plant; buy in bulk |
 | 5 V power supply (PSA05A-class) + USB-C cable | 1 | |
 | M3 thread-forming screws (×8 mm ~12, ×20 mm ~9) | ~21 | |
-| **Printed parts** (below) | 1 set | chassis, top, bottom, platform, base, shim, mount, duct |
+| **Printed parts** (below) | 1 set | carousel disk, housing body + shroud, base plate, tank platform, dosing spout, MCU mount, leveling shim |
 
-*Rough prototype total ≈ **$265** in materials. Most of that is retail tubing and
-the dev modules; neither reflects volume cost.*
+*The parts actually consumed in one build run ~**$80–120**; the real-world retail
+spend is ~**$200–265** once minimum-order packs, bulk tubing, and the dev modules
+are counted (you'll have spares). Neither figure reflects volume cost.*
 
 ### Printed parts
 
-**Eight printed parts, included** in [`hardware/stl/`](hardware/stl/) — the
-M5-stack snapshot (2026-07-20) matching the `v1.0.3` firmware: the 13-position
-carousel disk, the indexing ring, shroud, tank, dosing arm + duct, mount, and an
-optional hanger. See **[`hardware/parts_overview.png`](hardware/parts_overview.png)**.
+**Eight printed parts, included** in [`hardware/stl/`](hardware/stl/), extracted
+from the CAD assembly: `carousel_disk`
+(13 metering positions), `housing_body`, `housing_shroud`, `base_plate`,
+`tank_platform`, `dosing_spout`, `mcu_mount`, and `leveling_shim`. See
+**[`docs/img/parts_overview.png`](docs/img/parts_overview.png)** and
+[`hardware/stl/README.md`](hardware/stl/README.md) for the size table.
 Print in PLA/PETG, 0.2 mm layers, 3–4 walls, 20–30% infill. (Verify fit against
-your modules before a full run — see the note in `hardware/stl/`.)
+your modules before a full run.)
 
 ### Wiring — read this twice
 
@@ -109,18 +114,19 @@ are already used by AtomicMotion and the IMU):
 (AtomicMotion's own STM32 `0x38` + INA226 `0x40` sit on the internal Wire bus,
 GPIO 38/39; the IMU is on M5Unified's internal bus. Both untouched.)
 
-A proper wiring diagram goes in [`hardware/wiring/`](hardware/wiring/).
+A visual wiring diagram is in the works; until it lands, **the tables above are
+the authoritative wiring**.
 
 ## Assembly (outline)
 
-1. Print the parts; heat-set / thread-form the M3 screws.
+1. Print the parts; thread-form the M3 screws.
 2. Do the **bipolar mod** on the stepper; wire coils A/B to M1/M2.
-3. Mount the AtomicMotion base + AtomS3; fit the stepper to the carousel.
-4. Fit the AS5600 + its diametric magnet on the rotation axis (Port B).
+3. Mount the **MCU mount** (`mcu_mount`) + AtomS3 and the **U177 scale** (Port C) to the chassis.
+4. Press the **diametric magnet into the dosing spout** on the stepper shaft; glue the **AS5600 under the tank platform** (Port B, 5 V, **DIR→GND**) so it reads that magnet.
 5. Wire the solenoid through the servo→H-bridge module (Servo 1).
-6. Mount the load cell / U177 scale (Port C); plumb the dosing spout.
-7. Fit the 13 syringe vessels + luer lines; route tubing to your plants.
-8. Flash the firmware (see [`firmware/`](firmware/)) and **calibrate the carousel**.
+6. Seat the 13 syringe vessels, drop the **leveling shim**, plumb the dosing spout; route tubing to your plants.
+7. Flash the firmware (see [`firmware/`](firmware/)) and **calibrate the carousel**.
+8. Trim the 1-gal jug for `housing_shroud` clearance and screw it down from the chassis base.
 
 A full step-by-step with photos is in [`docs/`](docs/) (and as a printable PDF).
 
@@ -157,6 +163,8 @@ closed, and only then introduce water. This is the failure that empties a
 reservoir onto your floor.
 
 ---
+
+<p align="center"><img src="docs/img/mabel.png" width="150" alt="Mabel"><br><em>Mabel · Quality Control</em></p>
 
 *Made by one person who got tired of killing plants. If you build one, show us —
 tag [@pluviogrow](https://pluviogrow.com). Generation Green. 🌱*

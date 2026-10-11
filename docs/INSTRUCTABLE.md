@@ -1,13 +1,15 @@
+<p align="center"><img src="img/pluvio_mark.png" width="82" alt="Pluvio"></p>
+
 # Build a 13-Plant Self-Watering Robot (Open Source) — Pluvio Grow M5
 
 ## Intro
 
-![Pluvio Grow — 13-plant build, deployed](../photos/IMG_1336.jpg)
+![Pluvio Grow — M5 build, sectioned](img/hero_section.png)
 
 I kept killing my plants — so I built a little robot that waters 13 of them, each
 its own exact amount, measured **by weight**. One arm spins around a carousel,
 stops at each plant, and doses it from a single reservoir. It runs fully offline
-on a tiny ESP32, and I open-sourced the whole thing so you can build your own.
+on a tiny ESP32, and I made the whole thing source-available so you can build your own.
 
 
 **What makes it different from a $40 drip timer:** it *weighs* every pour with a
@@ -16,7 +18,8 @@ load cell, so the cactus gets 15 g and the fern gets 60 g — not "everything fo
 
 - **Difficulty:** intermediate (soldering/crimping, a stepper tweak, 3D printing)
 - **Time:** a weekend
-- **Cost:** roughly **$80–120** in parts (see notes on min-order quantities)
+- **Cost:** ~**$80–120** in parts for one build (per-unit prices); budget closer to
+  ~**$200–265** at checkout once minimum-order packs and bulk tubing are counted — you'll have spares
 
 ---
 
@@ -31,6 +34,7 @@ load cell, so the cactus gets 15 g and the fern gets 60 g — not "everything fo
 | M5Stack **Atomic Motion Base** v1.2 (stepper + servo driver) | A090-V12 | 1 | $8.50 |
 | **Olimex SM-5VDC** stepper (5-wire; convert to 4-wire **bipolar** — see note) | SM-5VDC | 1 | $1.76 |
 | **AS5600** magnetic rotary encoder (arm position) | [AliExpress](https://www.aliexpress.com/item/1005008249897817.html) | 1 | — |
+| **Diametric magnet, 6 × 2.5 mm** (AS5600 target — presses into the dosing spout on the motor shaft) | generic (AliExpress) | 1 | — |
 | 5 V 5 W wall adapter | PSA05A-050QL6-H | 1 | $3.91 |
 | USB-A → USB-C cable | DH-20M50053 | 1 | $1.92 |
 | Connector housing, 2-pos 2.54 mm | M20-1060200 | 2 | $0.10 |
@@ -48,23 +52,19 @@ load cell, so the cactus gets 15 g and the fern gets 60 g — not "everything fo
 | Solenoid driver (RC-PWM → DC) | [AliExpress](https://www.aliexpress.com/item/1005009888337481.html) | lets the Atomic Motion servo channel switch the valve |
 | **60 mL Luer-lock syringe** ×13 | generic (AliExpress / Amazon) | per-plant carousel vessels |
 | **Luer-lock → 1/4″ tube adapter** ×13 | generic | connects the tube to each syringe |
-| Silicone tubing, 1/8″ ID × 1/4″ OD, soft 50A | [McMaster 51135K16](https://www.mcmaster.com/catalog/51135K16) | one run per plant — **⚠️ CONFIRM total length for your layout** |
+| Silicone tubing, 1/8″ ID × 1/4″ OD, soft 50A | [McMaster 51135K16](https://www.mcmaster.com/catalog/51135K16) | one run per plant; ≈6 ft each, ~78 ft total for 13 — measure your layout and buy in bulk |
 | 1-gallon utility jug | [Uline S-10746B](https://www.uline.ca/Product/Detail/S-10746B/Jugs/Utility-Jugs-Bulk-Pack-1-Gallon-Natural) | reservoir |
 | Top-hat rubber grommets (6 mm hole / 4 mm ID) | [Amazon (uxcell 46-pc)](https://www.amazon.ca/dp/B0D9LV9G8R) | valve / tube seal |
 | M3 × 8 mm thread-forming screws | [McMaster 99461A941](https://www.mcmaster.com/catalog/99461A941) | plastic assembly |
 | M3 × 20 mm thread-forming screws | [McMaster 99461A947](https://www.mcmaster.com/catalog/99461A947) | plastic assembly |
 
-> **⚠️ CONFIRM — not yet in the BOM:** a **diametric magnet** for the AS5600
-> (glued to the arm's rotation axis — the encoder reads it), and the **tube
-> length** for your layout.
-
 ### 3D-printed parts
 
 Eight printed parts, included in `hardware/stl/`, from the confirmed M5
-assembly (`hardware/step/pluvio_m5_assembly.STEP`). Print in PLA/PETG, 0.2 mm layers, 3–4 walls,
+assembly. Print in PLA/PETG, 0.2 mm layers, 3–4 walls,
 20–30% infill.
 
-![The eight printed parts](../hardware/parts_overview.png)
+![The eight printed parts](img/parts_overview.png)
 
 ### Tools
 
@@ -77,9 +77,13 @@ screwdriver, hobby knife, a cheap digital scale (to sanity-check the load cell).
 
 Print all eight parts from `hardware/stl/`: `carousel_disk` (13 metering
 positions), `housing_body`, `housing_shroud`, `base_plate`, `tank_platform`,
-`dosing_spout`, `motor_mount`, and `leveling_shim`. PLA or PETG, 0.2 mm layers,
-3–4 walls, 20–30% infill. Most parts need no supports; orient the shroud and
-housing open-side-down. See `hardware/stl/README.md` for the full size table.
+`dosing_spout`, `mcu_mount`, and `leveling_shim`. PETG (or PLA), ~0.2 mm layers,
+3–4 walls, ~25% infill. Most parts are designed to print **without supports** —
+the exception is the **chassis-bottom pockets**, which need supports. Orient the
+shroud and housing open-side-down. See `hardware/stl/README.md` for the size table.
+
+> **What I printed:** a **Bambu P1S / H2S**, **0.6 mm nozzle**, **PETG**, ~**25%
+> infill**. The 0.6 mm nozzle handles the whole set — no fine-nozzle parts here.
 
 ## Step 2 — Wire the electronics
 
@@ -103,11 +107,23 @@ and the valve, so there's no separate motor driver board.
 
 ## Step 3 — Assemble the mechanism
 
-Mount the motor and carousel, fit the encoder magnet on the rotation axis, seat
-the per-plant vessels, and plumb the dosing spout. Seal the valve/tube passes
-with the top-hat grommets.
+1. **Mount the MCU mount and the scale** (`mcu_mount` + Mini Scales) to the
+   chassis with **two long (M3 × 20 mm) screws**.
+2. **Seat the 13 syringes**, then drop the **shim** (`leveling_shim`) over them to
+   hold them in place, and drive **every second short (M3 × 8 mm) screw** into the
+   smaller-diameter holes.
+3. **Mount the stepper motor** to the chassis with **two short screws**.
+4. **Install the motor magnet into the dosing spout** (`dosing_spout`) and press
+   the spout onto the **motor shaft** — this diametric magnet is what the AS5600
+   reads for arm position.
+5. **Solder a cable header to the AS5600 encoder** and **glue it to the underside
+   of the tank platform** (`tank_platform`). The encoder runs at **5 V**, with
+   **DIR tied to GND**.
+6. Once everything is **programmed and working**, **trim the 1-gallon jug** for a
+   clearance fit inside the `housing_shroud`, and screw it down from the **bottom
+   of the chassis with the longer screws**.
 
-![The assembled carousel — 13 weighed metering vessels](../photos/IMG_0996.jpg)
+Seal the valve/tube passes with the top-hat grommets.
 
 ## Step 4 — Plumb it
 
@@ -136,3 +152,5 @@ Source-available from **[Pluvio Grow](https://pluviogrow.com)**, a product of **
 Electronic Inc.** Hardware & docs under **CC BY-NC-SA 4.0**; patent pending
 (US 64/071,683) on the weighed-dosing mechanism — personal/non-commercial builds
 welcome. Build one, show us, tag us. 🌱
+
+<p align="center"><img src="img/mabel.png" width="140" alt="Mabel"><br><em>Mabel · Quality Control</em></p>

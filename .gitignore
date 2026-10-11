@@ -9,9 +9,25 @@ build/
 # photos/ is 449 MB of .MOV; IMG_1291.MOV alone is 202 MB, over GitHub's
 # 100 MB per-file hard limit. Video goes to YouTube and is linked from
 # the README, where it is also discoverable, which a .MOV in a repo is not.
-photos/
+photos/*
 # social/ is marketing working files and bundled fonts. Redistributing
 # licensed fonts in a public repo is a licence violation.
 social/
 # staging copy of the Instructable
 docs/_tmp_hold/
+
+# superseded / scratch working dirs (not for publication)
+_cleanup_hold/
+hardware/stl/_superseded/
+
+# CAD source (STEP) is not published — STLs are the shipped geometry
+hardware/step/
+
+# Arduino IDE 2.x debug artifacts (generated in the sketch folder)
+firmware/pluvio_m5/debug.cfg
+firmware/pluvio_m5/debug_custom.json
+firmware/pluvio_m5/*.svd
+
+# ===== TEMPORARY — firmware withheld until it builds clean =====
+# Remove this block (and run: git add firmware/) once the Arduino build passes.
+firmware/
